@@ -530,3 +530,170 @@ int main()
 }
 ```
 
+#### 1.3.5 类模板与继承
+
+当类模板碰上继承时，需要注意以下几点：
+
+- 当子类继承的父类是一个类模板是，子类在声明的时候，要指定出父类中T的类型
+- 如果不指定，编译器无法给予子类分配内存
+- 如果想灵活指定出父类中T的类型，子类也需要变为类模板
+
+下图 当我们的父类是一个类模板的时候，正常的方式肯定是不可以的，需要在Base后面写出参数列表。
+
+![image-20250721084944821](http://szn0n3z42.hb-bkt.clouddn.com/image-20250721084944821.png)
+
+```cpp
+template<class T>
+class Base
+{
+public:
+
+	T m_A;
+};
+
+//1. 当子类继承的父类是一个类模板是，子类在声明的时候，要指定出父类中T的类型
+class Son1 :public Base<int>
+{
+
+};
+
+//2. 如果想灵活指定出父类中T的类型，子类也需要变为类模板
+template<class T1, class T2>
+class Son2 :public Base<T2>
+{
+public:
+
+	T1 m_A;
+};
+```
+
+总结： 如果父类是类模板，子类需要指定出父类中T的数据类型
+
+#### 1.3.6 类模板成员函数类外实现
+
+- 类模板中成员函数类外实现时，需要加上模板参数列表
+
+![image-20250721092932881](http://szn0n3z42.hb-bkt.clouddn.com/image-20250721092932881.png)
+
+代码示例:
+
+```cpp
+template<class T1, class T2>
+class Person
+{
+public:
+	Person(T1 name, T2 age);
+
+	void showPerson();
+
+	T1 m_Name;
+	T2 m_Age;
+};
+
+template<class T1, class T2>
+Person<T1, T2>::Person(T1 name, T2 age)
+{
+	this->m_Name = name;
+	this->m_Age = age;
+}
+template<class T1, class T2>
+void Person<T1, T2>::showPerson()
+{
+	cout << "姓名: " << this->m_Name << " 年龄: " << this->m_Age << endl;
+}
+
+
+void test01()
+{
+	Person<string, int> p("xl", 18);
+	p.showPerson();
+}
+```
+
+#### 1.3.7 类模板分文件编写
+
+ 因为在`1.3.3类模板创建时机`中学过，**类模板成员函数在调用时才创建** 所以他和普通的类函数份文件编写不一样。
+
+- 普通的类函数份文件编写只需要保护其`.h`文件就好了，而类模板则需要包含类模板函数具体实现的`.cpp`文件，这是第一种解决方式。
+- 第二种解决方式是将` .h`文件和`.cpp`文件写在一起，改为后缀为`.hpp`的文件
+
+
+
+主流的解决方法是第二种解决方法，将类模板成员函数写到一起，并改后缀为`.hpp`
+
+#### 1.3.8 类模板与友元
+
+额。。。。。全局函数类内实现简单加个`friend`就好了。
+
+额。。。。。全局函数类外实现。。。。。。。先让编译器知道有这个函数，但是知道这个函数前又必须让编译器知道那个`Person`类,因为函数中用到了`Person`类了。
+
+套娃这一块./ 
+
+左脚踩右脚这一块./
+
+![image-20250721110951300](http://szn0n3z42.hb-bkt.clouddn.com/image-20250721110951300.png)
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//让下面的知道Person
+template<class T1, class T2>
+class Person;
+
+//全局函数 类外实现
+template<class T1, class T2>
+void printfPerson2(Person<T1, T2> p)
+{
+	cout << "姓名: " << p.m_Name << " 年龄: " << p.m_Age << endl;
+}
+
+template<class T1, class T2>
+class Person
+{
+	//全局函数 类内实现
+	friend void printfPerson(Person<T1, T2> p)
+	{
+		cout << "姓名: " << p.m_Name << " 年龄: " << p.m_Age << endl;
+	}
+	//全局函数 类外实现
+	//加空模板的参数列表
+	//如果全局函数是类外实现，需要让编译器提前知道 这函数的存在
+	friend void printfPerson2<>(Person<T1, T2> p);
+
+public:
+	Person(T1 name, T2 age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+
+private:
+	T1 m_Name;
+	T2 m_Age;
+};
+
+
+
+void test01()
+{
+	Person<string, int> p("xl", 18);
+	printfPerson(p);
+
+
+	Person<string, int> p2("n9", 21);
+	printfPerson2(p2);
+
+}
+
+int main()
+{
+	test01();
+	return 0; 
+}
+```
+
+建议全局函数做类内实现，用法简单，而且编译器可以直接识别。
+
