@@ -623,9 +623,9 @@ void test01()
 
 #### 1.3.8 类模板与友元
 
-额。。。。。。全局函数类内实现简单加个`friend`就好了。
+额。。。。。全局函数类内实现简单加个`friend`就好了。
 
-额。。。。。。全局函数类外实现。。。。。。。。先让编译器知道有这个函数，但是知道这个函数前又必须让编译器知道那个`Person`类,因为函数中用到了`Person`类了。
+额。。。。。全局函数类外实现。。。。。。。先让编译器知道有这个函数，但是知道这个函数前又必须让编译器知道那个`Person`类,因为函数中用到了`Person`类了。
 
 套娃这一块./ 
 
@@ -696,4 +696,420 @@ int main()
 ```
 
 建议全局函数做类内实现，用法简单，而且编译器可以直接识别。
+
+## 2. STL初始
+
+
+
+## 3. STL常用的容器
+
+#### 3.1 String容器
+
+string 是C++的字符串，而string本质上是一个类。
+
+- `char*` 是一个指针
+- `string` 是一个类，类中封装了`char*` 管理了这个字符串，是一个`char*`型容器
+
+特点：比起C语言来讲，不必担心**越界**问题以及`'\0'`问题
+
+##### 3.1.1 string构造函数
+
+构造函数原型:
+
+- `stirng();`	创建一个空的字符串
+  `string(const char* s) `利用字符串s初始化
+- `string(const string& str);` 利用string对象初始化另一个string对象
+- `string(int n, char c);` 使用n个字符c初始化
+
+**代码示例:**
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+/*
+- `stirng();`	创建一个空的字符串
+  `string(const char* s) `利用字符串s初始化
+- `string(const string& str);` 利用string对象初始化另一个string对象
+- `string(int n, char c);` 使用n个字符c初始化
+*/
+
+
+void test01()
+{
+
+	
+	string s1;				//默认构造
+		
+	string s2("abcdef");
+	cout << s2 << endl;
+	
+
+	string s3(s2);
+	cout << s3 << endl;
+
+	string s4(9, 'n');
+	cout << s4 << endl;
+}
+
+
+int main()
+{
+
+	test01();
+	return 0;
+}
+```
+
+----
+
+##### 3.1.2 string赋值操作
+
+![image-20250723094624225](http://szn0n3z42.hb-bkt.clouddn.com/image-20250723094624225.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+void test01()
+{
+	//三种等号赋值
+	string str1;
+	str1 = "N9 is my idol!";
+	cout << "str1 = " << str1 << endl;
+
+
+	string str2;
+	str2 = str1;
+	cout << "str2 = " << str2 << endl;
+
+	
+	string str3;
+	str3 = 'y';
+	cout << "str3 = " << str3 << endl;
+
+
+	//
+	string str4;
+	str4.assign("DBQ is my idol!");
+	cout << "str4 = " << str4 << endl;
+
+	string str5;
+	str5.assign("DBQ is my idol!", 3);
+	cout << "str5 = " << str5 << endl;
+
+
+	string str6;
+	str6.assign(str5);
+	cout << "str6 = " << str6 << endl;
+
+
+	string str7;
+	str7.assign(9, 'N');
+	cout << "str7 = " << str7 << endl;
+
+}
+
+int main()
+{
+
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.1.3 string字符串拼接
+
+- 实现字符串末尾拼接字符串
+
+![image-20250723100125762](http://szn0n3z42.hb-bkt.clouddn.com/image-20250723100125762.png)
+
+代码示例：
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+//string 字符串拼接操作。
+
+
+void test01()
+{
+
+	//+= 号
+	string str1 = "N9 ";
+	str1 += "is my idol";
+	cout << "str1 = " << str1 << endl;
+
+	str1 += ':';
+	cout << "str1 = " << str1 << endl;
+
+	string str2 = "(十年前我是金枪王,十年后我还是金枪王)";
+	str1 += str2;
+	cout << "str1 = " << str1 << endl;
+
+	//append
+	string str3 = "I";
+	str3.append(" love ");
+	cout << "str3 = " << str3 << endl;
+
+	str3.append("game abcdef", 4);
+	cout << "str3 = " << str3 << endl;
+
+	string str4 = " is cf.";
+	//str3.append(str4);
+	str3.append(str4, 3, 4);
+	cout << "str3 = " << str3 << endl;
+
+
+}
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+#####  3.1.4 string查找和替换
+
+- 替换: 查找指定字符串是否存在
+- 替换: 在指定的位置替换字符串
+
+![image-20250723102023803](http://szn0n3z42.hb-bkt.clouddn.com/image-20250723102023803.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+//字符串查找和替换
+
+//1. 查找
+void test01()
+{
+	string str1 = "decdefg";
+	//find	从右往左
+	int pos = str1.find("de");	//有返回下标 没有返回-1	第一次出现
+	if (pos == -1)
+		cout << "未找到字符串" << endl;
+	else
+		cout << "pos = " << pos << endl;
+
+	//rfind 从左往右 
+	pos = str1.rfind("de");	//有返回下标 没有返回-1	最后一次出现
+	if (pos == -1)
+		cout << "未找到字符串" << endl;
+	else
+		cout << "pos = " << pos << endl;
+}
+
+
+//2. 替换
+void test02()
+{
+	string str1 = "abcdefg";
+
+	//从1号位置起，3个字符替换为"1111"
+	str1.replace(1, 3,"1111");
+	cout << "str1 = " << str1 << endl;
+
+}
+
+int main()
+{
+
+	//test01();
+	test02();
+	return 0;
+}
+```
+
+---
+
+##### 3.1.5 string字符串比较
+
+- 字符串比较是按照字符的ASCII码进行比较
+- 等于返回0
+- 大于返回1
+- 小于返回-1
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+void test01()
+{
+	string str1 = "b";
+	string str2 = "abcde";
+
+	if (str1.compare(str2) == 0)
+	{
+		cout << "str1 == str2" << endl;
+	}
+	else if (str1.compare(str2) > 0)
+		cout << "str1 > str2 " << endl;
+	else
+		cout << "str1 < str2" << endl;
+
+
+
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+#####  3.1.6 string 字符存取
+
+`string` 中单个字符存取方式有两种
+
+- `char& operator[](int n);` 通过`[]`的方式取字符
+- `char& at(int n);`通过`at`方式获取字符
+
+代码示例：
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+void test01()
+{
+	string str1 = "abcdefg";
+
+	for (int i = 0; i < str1.size(); i++)
+		cout << str1[i] << " ";
+
+	cout << endl;
+
+
+	for (int i = 0; i < str1.size(); i++)
+		cout << str1.at(i) << " ";
+
+	cout << endl;
+
+	//修改单个字符
+	str1[0] = 'x';
+	str1.at(1) = 'x';
+	cout << str1 << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.1.7 string插入和删除
+
+![image-20250723143101859](http://szn0n3z42.hb-bkt.clouddn.com/image-20250723143101859.png)
+
+ 
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+void test01()
+{
+	string str = "hello";
+
+	//插入
+	str.insert(1, "111");
+	cout << "str = " << str << endl;
+
+
+	//删除
+	str.erase(1, 3);
+	cout << "str = " << str << endl;
+
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+##### 3.1.8 string子串
+
+- `string subter(int pos = 0, int n = npos)const;` 返回由`pos`开始的n个字符组成的字符串。
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+void test01()
+{
+	string str = "abcdef";
+	string subStr = str.substr(1, 3);
+
+	cout << "subStr =  " << subStr << endl;
+
+}
+
+//使用操作
+void test02()
+{
+	string email = "xl@code.com";
+	
+	//从邮件的地址中获取用户的信息
+	int pos = email.find('@');
+	
+	string userName = email.substr(0, pos);
+
+	cout << "userName = " << userName << endl;
+}
+
+int main()
+{
+	//test01();
+	test02();
+	return 0;
+}
+```
 
