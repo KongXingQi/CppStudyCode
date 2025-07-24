@@ -1071,6 +1071,8 @@ int main()
 }
 ```
 
+---
+
 ##### 3.1.8 string子串
 
 - `string subter(int pos = 0, int n = npos)const;` 返回由`pos`开始的n个字符组成的字符串。
@@ -1109,6 +1111,433 @@ int main()
 {
 	//test01();
 	test02();
+	return 0;
+}
+```
+
+---
+
+####  3.2 vector 容器
+
+- vector 数据结构和**数组**十分相似，也成为**单端数组**。
+- 不同的是:数据是**静态的**，vector是**动态的**。
+
+动态扩展，并不是在原有的空间后继续开辟新的空间，而是寻找更大的空间，将原有数据拷贝新空间，释放原空间。
+
+- vector容器的迭代器，是支持**随机访问**的迭代器。
+
+##### 3.3.1 vector 构造函数
+
+![image-20250724152151512](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724152151512.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+void myPrint(vector<int> v)
+{
+	for (int i = 0; i < v.size(); i++)
+		cout << v[i] << " ";
+
+	cout << endl;
+}
+
+
+void test01()
+{
+	//默认构造函数
+	vector<int> v1;
+	for (int i = 0; i < 10; i++)
+		v1.push_back(i);
+
+	myPrint(v1);
+
+	//区间构造
+	vector<int> v2(v1.begin(), v1.end());
+	myPrint(v1);
+
+
+	//n个elem
+	vector<int> v3(10, 6);
+	myPrint(v3);
+
+
+	//拷贝构造
+	vector<int> v4(v3);
+	myPrint(v4);
+
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+----
+
+##### 3.3.2 vector 赋值操作
+
+![image-20250724153735072](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724153735072.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+void printVector(vector<int>& v)
+{
+
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+
+void test01()
+{
+	vector<int> v1;
+	for (int i = 0; i < 10; i++)
+		v1.push_back(i);
+
+	printVector(v1);
+
+	//operator=
+	vector<int> v2;
+	v2 = v1;
+	printVector(v2);
+
+	//assign 区间赋值
+	vector<int> v3;
+	v3.assign(v2.begin(), v2.end());
+	printVector(v3);
+
+	//assign n个elem
+	vector<int> v4;
+	v4.assign(10, 6);
+	printVector(v4);
+
+
+}
+
+int main()
+{
+
+	test01();
+	return 0;
+}
+```
+
+----
+
+##### 3.3.3 vector容量和大小
+
+![image-20250724155017378](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724155017378.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+void printVector(vector<int>& v1)
+{
+	for (int i = 0; i < v1.size(); i++)
+		cout << v1[i] << " ";
+
+	cout << endl;
+}
+
+
+
+void test01()
+{
+	vector<int> v1;
+	for (int i = 0; i < 10; i++)
+		v1.push_back(i);
+	printVector(v1);
+
+	if (v1.empty())
+	{
+		cout << "v1 为空! " << endl;
+	}
+	else
+	{
+		cout << "v1 的容量是: " << v1.capacity() << endl;
+		cout << "v1 的大小是: " << v1.size() << endl;
+	}
+
+	v1.resize(15);	//默认新增的为0
+	printVector(v1);
+	v1.resize(20, 666);	//指定新增的为 666
+	printVector(v1);
+
+	v1.resize(5);
+	printVector(v1);
+
+
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+-----
+
+##### 3.3.4 vector插入和删除
+
+![image-20250724160733658](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724160733658.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+void printVector(vector<int>& v)
+{
+
+	for (int i = 0; i < v.size(); i++)
+		cout << v[i] << " ";
+
+	cout << endl;
+}
+
+
+void test01()
+{
+	vector<int> v1;
+
+	for (int i = 1; i <= 10; i++)
+		v1.push_back(i);
+
+	printVector(v1);
+
+	for (int i = 0; i < 5; i++)
+		v1.pop_back();
+	
+	printVector(v1);
+
+
+	v1.insert(v1.begin(), 10);
+	printVector(v1);
+
+	v1.insert(v1.begin(), 3, 100);
+	printVector(v1);
+
+	v1.erase(v1.begin());
+	printVector(v1);
+
+
+	v1.erase(v1.begin(), v1.begin() + 3);
+	printVector(v1);
+
+	v1.clear();
+	printVector(v1);
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+------
+
+##### 3.3.5 vector数据存取
+
+![image-20250724164516903](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724164516903.png)
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void test01()
+{
+	vector<int> v1;
+	for (int i = 0; i < 10; i++)
+		v1.push_back(i);
+
+	for (int i = 0; i < v1.size(); i++)
+		cout << v1[i] << " ";
+
+	cout << endl;
+
+	for (int i = 0; i < v1.size(); i++)
+		cout << v1.at(i) << " ";
+
+	cout << endl;
+
+	cout << "v1 中第一个元素是: " << v1.front() << endl;
+	cout << "v1 中最后一个元素是: " << v1.back() << endl;
+
+}
+
+
+int main()
+{
+
+	test01();
+	return 0;
+}
+```
+
+----
+
+##### 3.3.6 vector互换容器
+
+- 实现两个容器内元素进行互换
+- `swqp(vec);` //将vect与本身的元素互换
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+
+void printVector(vector<int> v)
+{
+	for (int i = 0; i < v.size(); i++)
+		cout << v[i] << " ";
+
+	cout << endl;
+}
+
+
+//1.基本使用
+void test01()
+{
+	vector<int> v1;
+	cout << "交换前: " << endl;
+	for (int i = 0; i < 10; i++)
+		v1.push_back(i);
+
+	printVector(v1);
+
+	vector<int> v2;
+	for (int i = 10; i > 0; i--)
+		v2.push_back(i);
+
+	printVector(v2);
+
+	cout << "交换后: " << endl;
+	v1.swap(v2);
+	printVector(v1);
+	printVector(v2);
+
+
+
+} 
+
+//2.实际用途
+//巧用swap可以收缩内存空间
+void test02()
+{
+	vector<int> v;
+	for (int i = 0; i < 100000; i++)
+		v.push_back(i);
+
+	cout << "v的容量是: " << v.capacity() << endl;
+	cout << "v的大小是: " << v.size() << endl;
+	cout << endl;
+
+
+	v.resize(3);
+	cout << "v的容量是: " << v.capacity() << endl;
+	cout << "v的大小是: " << v.size() << endl;
+	cout << endl;
+
+
+	vector<int>(v).swap(v);	//将匿名vector和v互换，然后系统自动释放匿名。
+	cout << "v的容量是: " << v.capacity() << endl;
+	cout << "v的大小是: " << v.size() << endl;
+	cout << endl;
+
+}
+
+int main()
+{
+
+	//test01();
+	test02();
+	return 0;
+}
+```
+
+---
+
+##### 3.3.7 vector预留空间
+
+- 可以减少vector在动态扩展容量时的扩展次数
+- `reserve(int len)` //容器预留`len`个元素长度，预留位置不初始化，元素不可访问。
+
+提前开辟可以减少中途新开辟空间，并迁移数据的麻烦。
+
+![image-20250724174720070](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724174720070.png)
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void test01()
+{
+	vector<int> v(1000000);
+	int cnt = 0;
+	int* p = NULL;
+
+	for (int i = 0; i < 100000; i++)
+	{
+		/*if (v.size() >= v.capacity())
+			cnt++;
+		*/
+		v.push_back(i);
+		//看看开辟了多少次，迁移了多少次
+		if (p != &v[0])
+		{
+			p = &v[0];
+			cnt++;
+		}
+
+	}
+
+
+	cout << "cnt = " << cnt;
+}
+
+
+int main()
+{
+	test01();
 	return 0;
 }
 ```
