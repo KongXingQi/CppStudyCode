@@ -1881,3 +1881,53 @@ int main()
 }
 ```
 
+----
+
+#### 3.4 stack 容器
+
+- statck 是栈是一种给**先进后出**的一种数据结构，它是由一个出口。
+- 栈不允许有遍历行为。
+
+![image-20250725155327387](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725155327387.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <stack>
+
+using namespace std;
+
+void test01()
+{
+	stack<int> s;
+	s.push(10);
+	s.push(20);
+	s.push(30);
+	s.push(40);
+	s.push(50);
+
+	cout << "栈中大小为: " << s.size() << endl;
+
+	while (!s.empty())
+	{
+		cout << s.top() << endl;
+		s.pop();
+	}
+
+	cout << "栈中大小为: " << s.size() << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+#### 3.5 queue 容器
+
+- queue是一个**先进先出**的数据结构，有两个出口
