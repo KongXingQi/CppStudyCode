@@ -1542,3 +1542,342 @@ int main()
 }
 ```
 
+----
+
+#### 3.3 deque容器
+
+- 双端数组，可以对头端进行插入和删除操作。
+- deque相对而言，对头部的插入和删除速度比vector快
+- vector访问元素时速度比deque快，这和两者内部实现有关。
+
+![image-20250725083901808](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725083901808.png)
+
+##### 3.3.1 deque构造函数
+
+![image-20250725084635824](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725084635824.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <deque>
+
+
+using namespace std;
+
+
+void printDeque(const deque<int> d)
+{
+	for (auto it = d.begin(); it != d.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+
+
+void test01()
+{
+	deque<int> d1;
+	for (int i = 0; i < 10; i++)
+		d1.push_back(i);
+
+	printDeque(d1);
+
+	deque<int> d2(d1.begin(), d1.end());
+	printDeque(d2);
+
+	deque<int> d3(10, 66);
+	printDeque(d3);
+
+	deque<int> d4(d3);
+	printDeque(d4);
+
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+- deque 和 vector 容器的构造方式几乎一致，灵活使用即可。
+
+---
+
+##### 3.3.2 deque赋值操作
+
+- deque的赋值操作和vector的赋值操作几乎一致。
+
+![image-20250725085952821](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725085952821.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <deque>
+
+using namespace std;
+
+
+void printDeque(const deque<int>& d)
+{
+	for (auto it = d.begin(); it != d.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+void test01()
+{
+	deque<int> d1;
+	for (int i = 0; i < 10; i++)
+		d1.push_back(i);
+
+	printDeque(d1);
+
+	deque<int> d2;
+	d2 = d1;
+	printDeque(d2);
+
+	deque<int> d3;
+	d3.assign(d2.begin(), d2.end());
+	printDeque(d3);
+
+	deque<int> d4;
+	d4.assign(10, 6);
+	printDeque(d4);
+
+
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+#####  3.3.3 deque大小操作
+
+- 和vector的操作函数区别就少了一个容量，因为deque不需要判断容量，它本身就没有容量限制，可以无限的往后或者往前开辟空间。
+
+![image-20250725091442124](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725091442124.png)
+
+----
+
+#####  3.3.4deque插入和删除
+
+![image-20250725093738101](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725093738101.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <deque>
+
+using namespace std;
+
+
+void printDeque(const deque<int>& d)
+{
+	for (auto it = d.begin(); it != d.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+void test01()
+{
+	deque<int> d1;
+	//尾插
+	for (int i = 0; i < 10; i++)
+		d1.push_back(i);
+
+	printDeque(d1);
+
+	//头插
+	for (int i = 0; i < 10; i++)
+		d1.push_front(i);
+
+	printDeque(d1);
+
+	//尾删
+	d1.pop_back();
+	d1.pop_back();
+	d1.pop_back();
+	printDeque(d1);
+
+
+	//头删
+	d1.pop_front();
+	d1.pop_front();
+	d1.pop_front();
+	printDeque(d1);
+
+
+}
+
+void test02()
+{
+	deque<int> d1;
+	d1.push_back(1);
+	d1.push_back(2);
+	d1.push_back(3);
+	printDeque(d1);
+
+
+	d1.insert(d1.begin(), 10);
+	d1.insert(d1.begin(), 20);
+	printDeque(d1);
+
+	d1.insert(d1.begin(), 2, 100);
+	printDeque(d1);
+
+	// 按照区间进行插入。
+	deque<int> d2;
+	d2.push_back(1);
+	d2.push_back(2);
+	d2.push_back(3);
+
+	d1.insert(d1.begin(), d2.begin(), d2.end());
+	printDeque(d1);
+}
+
+void test03()
+{
+	deque<int> d1;
+	d1.push_back(1);
+	d1.push_back(2);
+	d1.push_back(3);
+	d1.push_back(4);
+
+	printDeque(d1);
+	auto it = d1.begin();
+	it++;
+
+	d1.erase(it);
+	printDeque(d1);
+
+
+	//按照区间删除
+	//d1.erase(d1.begin(), d1.end());
+	d1.clear();
+	printDeque(d1);
+
+}
+
+int main()
+{
+	//test01();
+	//test02();
+	test03();
+	return 0;
+}
+```
+
+---
+
+##### 3.3.5 deque数据存取
+
+![image-20250725102917791](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725102917791.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <deque>
+
+using namespace std;
+
+
+
+void test01()
+{
+	deque<int> d;
+	d.push_back(10);
+	d.push_back(20);
+	d.push_back(30);
+	d.push_back(40);
+	d.push_back(50);
+
+	for (int i = 0; i < d.size(); i++)
+		cout << d[i] << " ";
+
+	cout << endl;
+
+	for (int i = 0; i < d.size(); i++)
+		cout << d.at(i) << " ";
+
+	cout << endl;
+
+	cout << d.front() << endl;
+	cout << d.back() << endl;
+
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.3.6 deque 排序
+
+算法：
+
+- `sort(iterator beg, iterator end)` // 对beg和end区间元素进行排序。
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <deque>
+#include <algorithm>
+
+using namespace std;
+
+
+void printDeque(const deque<int>& d)
+{
+	for (int i = 0; i < d.size(); i++)
+		cout << d[i] << " ";
+
+	cout << endl;
+}
+
+
+void test01()
+{
+	deque<int> d;
+	d.push_back(10);
+	d.push_back(20);
+	d.push_back(260);
+	d.push_back(9);
+	d.push_back(37);
+
+	printDeque(d);
+
+
+	//排序 默认是升序
+	sort(d.begin(), d.end());
+
+	printDeque(d);
+
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
