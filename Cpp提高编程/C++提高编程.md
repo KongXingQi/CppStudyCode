@@ -1885,8 +1885,8 @@ int main()
 
 #### 3.4 stack 容器
 
-- statck 是栈是一种给**先进后出**的一种数据结构，它是由一个出口。
-- 栈不允许有遍历行为。
+- stack -- 栈是一种给**先进后出**的一种数据结构，它是由一个出口。
+- 栈只有栈顶可以由外界访问，因此不支持遍历行为。
 
 ![image-20250725155327387](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725155327387.png)
 
@@ -1930,4 +1930,458 @@ int main()
 
 #### 3.5 queue 容器
 
-- queue是一个**先进先出**的数据结构，有两个出口
+- queue -- 队列是一种**先进先出**的数据结构，有两个出口.
+- 只有对头和队尾可以由外界访问，因此不支持遍历。
+
+```cpp
+#include <iostream>
+#include <string>
+#include <queue>
+
+using namespace std;
+
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+
+	string m_Name;
+	int m_Age;
+};
+
+
+
+
+void test01()
+{
+	queue<Person> q;
+	Person p1("xl", 18);
+	Person p2("N9", 19);
+	Person p3("DBQ", 20);
+	Person p4("XXiao", 21);
+	Person p5("baby", 22);
+
+	q.push(p1);
+	q.push(p2);
+	q.push(p3);
+	q.push(p4);
+	q.push(p5);
+
+
+	cout << "队列中的大小为:d " << q.size() << endl;
+	while (!q.empty())
+	{
+		cout << "队首元素: " << "姓名: " << q.front().m_Name << " 年龄: " << q.front().m_Age << endl;
+		cout << "队尾元素: " << "姓名: " << q.back().m_Name << " 年龄: " << q.back().m_Age << endl;
+
+		q.pop();
+	}
+
+	cout << "队列中的大小为: " << q.size() << endl;
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+####  3.6 list 容器
+
+**list 又称链表**
+
+- 链表是一种物理存储单元上非连续的存储结构。
+- 链表是由一系列**节点**组成，节点又由**数据域**和**指针域**组成的。
+- 链表对于增删的效率要比vector高，但是遍历不如vector。
+
+ **STL中的链表是一个双向循环链表**
+
+##### 3.6.1 list 构造函数
+
+![image-20250726091616627](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726091616627.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+void printList(const list<int>& l1)
+{
+	for (auto it = l1.begin(); it != l1.end(); it++)
+		cout << *it << " ";
+		
+
+	cout << endl;
+}
+
+
+void test01()
+{
+	list<int> l1;
+	for (int i = 0; i < 10; i++)
+		l1.push_back(i);
+
+	printList(l1);
+
+	list<int> l2(l1);
+	printList(l2);
+
+
+	list<int> l3(l2.begin(), l2.end());
+	printList(l3);
+
+	list<int> l4(10, 6);
+	printList(l4);
+
+}
+
+
+int main()
+{
+
+	test01();
+	return 0;
+}
+```
+
+---
+
+#####  3.6.2 list 赋值和交换
+
+![image-20250726093120738](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726093120738.png)
+
+代码示例：
+
+ ```cpp
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+
+void printList(const list<int>& l)
+{
+	for (auto it = l.begin(); it != l.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+//赋值
+void test01()
+{
+	list<int> l1;
+	
+	for (int i = 0; i < 10; i++)
+		l1.push_back(i);
+
+
+	printList(l1);
+
+	list<int> l2;
+	l2 = l1;
+	printList(l2);
+
+	list <int> l3;
+	l3.assign(l2.begin(), l2.end());
+	printList(l3);
+
+	list<int> l4;
+	l4.assign(10, 6);
+	printList(l4);
+
+}
+
+void test02()
+{
+	list<int> l1;
+	for (int i = 0; i < 10; i++)
+		l1.push_back(i);
+
+	list<int> l2;
+	l2.assign(10, 6);
+	cout << "交换前: " << endl;
+	printList(l1);
+	printList(l2);
+
+	swap(l1, l2);
+	cout << "交换后: " << endl;
+	printList(l1);
+	printList(l2);
+
+}
+
+int main()
+{
+	//test01();
+	test02();
+	return 0;
+}
+ ```
+
+---
+
+##### 3.6.3 list 大小操作
+
+ ![image-20250726094647479](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726094647479.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+void printList(const list<int>& l)
+{
+	for (auto it = l.begin(); it != l.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+
+void test01()
+{
+	list<int> l1;
+	for (int i = 0; i < 10; i++)
+		l1.push_back(i);
+
+	printList(l1);
+	if (l1.empty())
+	{
+		cout << "l1 为空 " << endl;
+	}
+	else
+	{
+		cout << "l1 不为空! " << endl;
+		cout << "l1 大小为: " << l1.size() << endl;
+	}
+
+	// resize
+	l1.resize(15);
+	printList(l1);
+
+
+	l1.resize(20, 66);
+	printList(l1);
+
+	l1.resize(5);
+	printList(l1);
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.6.4 list 插入和删除
+
+![image-20250726095820737](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726095820737.png)
+
+代码示例：
+
+```cpp
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+void printList(const list<int>& l)
+{
+	for (auto it = l.begin(); it != l.end(); it++)
+		cout << *it << " ";
+	
+	cout << endl;
+}
+
+
+void test01()
+{
+	list<int> l1;
+	//尾插
+	l1.push_back(10);
+	l1.push_back(20);
+	l1.push_back(30);
+	//头插
+	l1.push_front(100);
+	l1.push_front(200);
+	l1.push_front(300);
+
+	printList(l1);
+
+	//头尾删
+	l1.pop_back();
+	l1.pop_front();
+	printList(l1);
+
+	auto it = l1.begin();
+	l1.insert(l1.end(), 66);
+	l1.insert(it, 6, 66);
+	printList(l1);
+
+	//区间插入
+	list<int> l2;
+	for (int i = 0; i < 5; i++)
+		l2.push_back(521);
+	it = l1.begin();
+	it++;
+	l1.insert(it, l2.begin(), l2.end());
+	printList(l1);
+
+	//删除
+	it = l1.begin();
+	l1.erase(it);
+	printList(l1);
+
+
+	l1.remove(521);
+	printList(l1);
+
+	l1.clear();
+	printList(l1);
+
+
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.6.5 list 数据存取
+
+- `front()` //返回第一个元素
+- `back()` //返回最后一个元素
+
+**list不支持随机访问**
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <list>
+
+using namespace std;
+
+void test01()
+{
+	list<int> l1;
+	l1.push_back(10);
+	l1.push_back(20);
+	l1.push_back(30);
+	l1.push_back(40);
+
+
+	cout << "第一个元素为 " << l1.front() << endl;
+	cout << "最后一个元素为 " << l1.back() << endl;
+
+	//不支持随机访问
+	auto it = l1.begin();
+	it++;
+	it--;
+	//it = it + 1;	//error   不支持随机访问
+
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+##### 3.3.6 list 反转和排序
+
+- 将容器元素反转以及排序。
+
+函数原型：
+
+- `reverse();` //反转链表
+- `srot();` //链表排序
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <list>
+#include <algorithm>
+
+using namespace std;
+
+
+void printList(const list<int>& l)
+{
+	for (auto it = l.begin(); it != l.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+bool myCompare(int v1, int v2)
+{
+	//第一个数 大于 第二数 10 9 8 .。。。。 
+	return v1 > v2;	//降序
+}
+
+
+void test01()
+{
+	list<int> l1;
+	l1.push_back(50);
+	l1.push_back(20);
+	l1.push_back(40);
+	l1.push_back(10);
+	l1.push_back(30);
+
+	cout << "反转前: " << endl;
+	printList(l1);
+	//反转
+	l1.reverse();
+	cout << "反转后: " << endl;
+	printList(l1);
+
+
+	//排序
+	//sort(l1.begin(), l1.end());	//标准算法库中的sort只能对支持随机访问的数据结构进行排序，比如strig vector 等等.
+	cout << "排序前: " << endl;
+	printList(l1);
+
+	l1.sort();
+	cout << "排序后: " << endl;
+	printList(l1);
+
+	l1.sort(myCompare);	//降序
+	printList(l1);
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+-----
+
