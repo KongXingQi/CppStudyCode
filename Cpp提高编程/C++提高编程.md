@@ -1,3 +1,5 @@
+
+
 # C++ 提高编程
 
 - 本阶段主要针对C++<mark>泛型编程</mark>>和<mark>STL</mark>技术的讲解。
@@ -2384,4 +2386,463 @@ int main()
 ```
 
 -----
+
+####  3.7 set/ multiset 容器
+
+- set容器中所有元素再插入时自动排序
+- set/multiset 属于**关联式容器** 底层用**红黑树**实现
+- set不允许出现重复的元素，multiset 允许出现重复的元素。
+
+##### 3.7.1 set 构造和赋值
+
+![image-20250726154044831](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726154044831.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <set>
+
+using namespace std;
+
+
+
+void printSet(const set<int>& s)
+{
+	for (auto it = s.begin(); it != s.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+void printMultiset(const multiset<int>& s)
+{
+	for (auto it = s.begin(); it != s.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+void test01()
+{
+	set<int> s1;
+
+	s1.insert(10);
+	s1.insert(30);
+	s1.insert(60);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(50);
+
+	//set中不支持重复的元素，只能插入一次
+	//自动排序
+	printSet(s1);
+
+	set<int> s2(s1);
+	printSet(s2);
+
+	set<int> s3;
+	s3 = s2;
+	printSet(s3);
+
+
+}
+void test02()
+{
+	multiset<int> s1;
+
+	s1.insert(10);
+	s1.insert(30);
+	s1.insert(60);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(50);
+
+	//multiset中支持重复的元素，
+	//自动排序
+	printMultiset(s1);
+
+	multiset<int> s2(s1);
+	printMultiset(s2);
+
+	multiset<int> s3;
+	s3 = s2;
+	printMultiset(s3);
+
+
+}
+
+int main()
+{
+	//test01();
+	test02();
+	return 0;
+}
+```
+
+---
+
+##### 3.7.2 set 大小和交换
+
+- `size();` // 返回容器中元素的数目
+- `empty();` // 判断容器是否为空
+- `swap();` //交换两个集合容器
+
+```cpp
+#include <iostream>
+#include <set>
+
+using namespace std;
+
+void printSet(const set<int>& s1)
+{
+	for (auto it = s1.begin(); it != s1.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+
+void test01()
+{
+	set<int> s1;
+	s1.insert(10);
+	s1.insert(40);
+	s1.insert(20);
+	s1.insert(30);
+
+	printSet(s1);
+
+	if (s1.empty())
+	{
+		cout << "s1 为空!" << endl;
+	}
+	else
+	{
+		cout << "s1 不为空! " << endl;
+		cout << "s1 大小为: " << s1.size() << endl;
+	}
+
+	set<int> s2;
+	s2.insert(100);
+	s2.insert(400);
+	s2.insert(200);
+	s2.insert(300);
+	cout << "交换前: " << endl;
+	printSet(s1);
+	printSet(s2);
+
+	cout << "交换后: " << endl;
+	s1.swap(s2);
+	printSet(s1);
+	printSet(s2);
+
+}
+
+int main()
+{
+
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.7.3 set 插入和删除
+
+![image-20250726161347926](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726161347926.png)
+
+```cpp
+#include <iostream>
+#include <set>
+
+using namespace std;
+
+
+void printSet(const set<int>& s1)
+{
+	for (auto it = s1.begin(); it != s1.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+
+
+void test01()
+{
+	set<int> s1;
+	s1.insert(10);
+	s1.insert(40);
+	s1.insert(30);
+	s1.insert(20);
+
+	printSet(s1);
+
+	s1.erase(s1.begin());
+	printSet(s1);
+
+	s1.erase(30);
+	printSet(s1);
+
+	//清空
+	//s1.erase(s1.begin(), s1.end());
+	s1.clear();
+	printSet(s1);
+
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.7.4 set 查找和统计
+
+- `find(key)`;  // 查找key是否存在，若存在返回改键的元素的迭代器；若不存在，返回set.end();
+- `count(key);` // 统计key的元素个数。
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <set>
+
+using namespace std;
+
+
+void printSet(const set<int>& s1)
+{
+	for (auto it = s1.begin(); it != s1.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+}
+
+
+
+void test01()
+{
+	set<int> s1;
+	s1.insert(10);
+	s1.insert(40);
+	s1.insert(30);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+
+	auto pos = s1.find(20);
+
+	if (pos == s1.end())
+	{
+		cout << "没找到！" << endl;
+	}
+	else
+	{
+		cout << "找到了！" << endl;
+	}
+	
+	cout << s1.count(20)  << endl;
+}
+
+void test02()
+{
+	multiset<int> s1;
+	s1.insert(10);
+	s1.insert(40);
+	s1.insert(30);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+	s1.insert(20);
+
+	cout << s1.count(20) << endl;
+
+}
+
+int main()
+{
+	//test01();
+	test02();
+	return 0;
+}
+```
+
+---
+
+##### 3.7.5 set 和 multiset的区别
+
+我感觉最大的区别就是 set检测重复的数据，multiset不检测重复的数据。
+
+如下图转到定义会发现： insert的返回值， set比multiset多一个bool型，这个bool就是看是否插入成功的。若书不存在则插入成功，返回true，若数据存在，则插入失败，返回false。
+
+![image-20250726171308638](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726171308638.png)
+
+----
+
+##### 3.7.6 pair 对组创建
+
+- 成对出现的数据，利用对组可以返回两个数据。
+
+![image-20250726172016695](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726172016695.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+void test01()
+{	
+	pair<string, int>p("xl", 18);
+	cout << "姓名: " << p.first << " 年龄: " << p.second << endl;
+
+	pair<string, int> p2 = make_pair("N9", 21);
+	cout << "姓名: " << p2.first << " 年龄: " << p2.second << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.7.7 set 容器排序
+
+- set默认是从小到大，学习改变set容器的排序规则
+- 利用**仿函数**可以改变排序规则。
+
+**示例：set 存放内置数据类型与set存放自定义数据类型**
+
+```cpp
+#include <iostream>
+#include <set>
+
+using namespace std;
+
+
+class MyCompare
+{
+public:
+	//重载一下() 注意要加const
+	//不是 const 函数，意思是编译器认为这个函数可能修改类的成员变量，
+	//而标准库是不允许在 const 对象上调用非 const 函数的，于是就报错了。
+	bool operator()(int v1, int v2) const
+	{
+		return v1 > v2;
+	}
+
+};
+
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+
+	string m_Name;
+	int m_Age;
+};
+
+class comparePerson
+{
+public:
+	bool operator()(const Person& p1, const Person& p2) const
+	{
+		return p1.m_Age > p2.m_Age;
+	}
+};
+
+
+
+// 1. set 存放内置数据类型
+void test01()
+{
+	set<int> s1;
+
+	//乱序插入
+	s1.insert(10);
+	s1.insert(50);
+	s1.insert(30);
+	s1.insert(40);
+	s1.insert(20);
+
+	//默认升序排序
+	for (auto it = s1.begin(); it != s1.end(); it++)
+		cout << *it << " ";
+	cout << endl;
+
+	//利用仿函数，改为降序排序
+	set<int, MyCompare> s2;
+	s2.insert(10);
+	s2.insert(50);
+	s2.insert(30);
+	s2.insert(40);
+	s2.insert(20);
+
+	for (auto it = s2.begin(); it != s2.end(); it++)
+		cout << *it << " ";
+	cout << endl;
+
+}
+
+
+// 2. set 存放自定义数据类型
+void test02()
+{
+	set<Person,comparePerson> s1;
+
+	Person p1("xl", 18);
+	Person p2("N9", 21);
+	Person p3("Ayom", 35);
+	Person p4("DBQ", 11);
+	Person p5("577", 25);
+
+
+	s1.insert(p1);
+	s1.insert(p2);
+	s1.insert(p3);
+	s1.insert(p4);
+	s1.insert(p5);
+
+	for (auto it = s1.begin(); it != s1.end(); it++)
+		cout << "姓名: " << it->m_Name << " 年龄: " << it->m_Age << endl;
+
+
+
+}
+int main()
+{
+	//test01(); //1.set 存放内置数据类型
+	test02();	//2.set 存放自定义数据类型
+	return 0;
+}
+```
+
+![image-20250726182136998](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726182136998.png)
+
+上面这张图片是在重载()时候的注意事项。
+
+---
 
