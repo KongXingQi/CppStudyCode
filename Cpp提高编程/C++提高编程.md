@@ -2846,3 +2846,305 @@ int main()
 
 ---
 
+####  3.8 map/ multimap 容器
+
+- map属于关联式容器 的底层也是红黑树。
+
+- map中所有的元素都是pari
+- pair中第一个元素为key(键值) 起到索引作用, 第二个元素为value（实值）
+- 所有元素会根key值自动排序
+
+**优点:**
+
+- 可以根据key值快速找到value值。
+
+**map和multimap的区别**
+
+- map不允许容器中有重复key值元素。
+- multimap允许容器中有重复key值元素。
+
+##### 3.8.1 map 构造和赋值
+
+- map容器中插入是以pair形式插入的。
+
+![image-20250727150303741](http://szn0n3z42.hb-bkt.clouddn.com/image-20250727150303741.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+void printMap(map<int, int> m)
+{
+	for (auto it = m.begin(); it != m.end(); it++)
+		cout << "key = " << it->first << " value = " << it->second << endl;
+
+	cout << endl;
+}
+
+void test01()
+{
+	map<int, int> m;
+
+	m.insert(pair<int, int>(1, 10));
+	m.insert(pair<int, int>(3, 30));
+	m.insert(pair<int, int>(4, 40));
+	m.insert(pair<int, int>(2, 20));
+
+	printMap(m);
+
+	map<int, int> m1(m);
+	printMap(m1);
+
+	map<int, int> m2;
+	m2 = m1;
+
+	printMap(m2);
+
+}
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.8.2 map 大小和交换
+
+- `size();` // 返回容器中元素的数目
+- `empty();` //判断容器是否为空
+- `swap(st);` //交换两个集合容器
+
+代码示例：
+
+```cpp
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+void printMap(map<int, int>& m)
+{
+	for (auto it = m.begin(); it != m.end(); it++)
+	{
+		cout << "key = " << it->first << " value = " << it->second << endl;
+	}
+
+	cout << endl;
+}
+
+void test01()
+{
+	map<int, int> m1;
+	m1.insert(pair<int, int>(1, 10));
+	m1.insert(pair<int, int>(2, 20));
+	m1.insert(pair<int, int>(3, 30));
+	m1.insert(pair<int, int>(4, 40));
+
+	if (m1.empty())
+	{
+		cout << "m1 为空！" << endl;
+	}
+	else
+	{
+		cout << "m1 不为空! " << endl;
+		cout << "m1 的大小为: " << m1.size() << endl;
+	}
+
+
+	map<int, int> m2;
+	m2.insert(pair<int, int>(10, 100));
+	m2.insert(pair<int, int>(20, 200));
+	m2.insert(pair<int, int>(30, 300));
+	m2.insert(pair<int, int>(40, 400));
+
+	cout << "交换前: " << endl;
+	printMap(m1);
+	printMap(m2);
+
+	
+	cout << "交换后: " << endl;
+	m1.swap(m2);
+	printMap(m1);
+	printMap(m2);
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.8.3 map 插入和删除
+
+![image-20250727153758875](http://szn0n3z42.hb-bkt.clouddn.com/image-20250727153758875.png)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+void printMap(map<int, int>& m)
+{
+	for (auto it = m.begin(); it != m.end(); it++)
+	{
+		cout << "key = " << it->first << " value = " << it->second << endl;
+	}
+
+	cout << endl;
+}
+
+void test01()
+{
+	map<int, int> m1;
+
+	//插入 四 种方式
+	m1.insert(pair<int, int>(1, 10));
+
+	m1.insert(make_pair(2, 20));
+
+	m1.insert(map<int, int>::value_type(3, 30));
+
+	m1[4] = 40;
+
+	cout << m1[5] << endl;	//出现m1[5]自动就在map中插入了key为5 value 为0的值。
+	printMap(m1);
+	
+	//删除
+	m1.erase(m1.begin());
+	printMap(m1);
+
+	m1.erase(5);	//按照key删除
+	printMap(m1);
+
+	//清空
+	//m1.erase(m1.begin(), m1.end());
+	m1.clear();
+	printMap(m1);
+}
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+#####  3.8.4 map 查找和统计
+
+- `find();` // 查找key是否存在，若存在返回元素的迭代器，否则返回`set.end();`
+- `cout();` // 统计key的元素个数
+
+```cpp
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+
+void test01()
+{
+	map<int, int> m1;
+	m1[1] = 10;
+	m1[2] = 20;
+	m1[3] = 30;
+	m1[4] = 40;
+	m1.insert(make_pair(3, 30));
+	m1.insert(make_pair(3, 30));
+	m1.insert(make_pair(3, 30));
+	m1.insert(make_pair(3, 30));
+
+	auto pos = m1.find(4);
+
+	if (pos != m1.end())
+	{
+		cout << "找到了！" << endl;
+		cout << "key = " << pos->first << " value = " << pos->second << endl;
+	}
+	else
+		cout << "没找到！" << endl;
+	
+	cout << m1.count(3) << endl;
+
+	multimap<int, int> m2;
+	m2.insert(make_pair(3, 30));
+	m2.insert(make_pair(3, 30));
+	m2.insert(make_pair(3, 30));
+	m2.insert(make_pair(3, 30));
+	m2.insert(make_pair(3, 30));
+
+
+	cout << m2.count(3) << endl;
+
+
+}
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+##### 3.8.5 map 排序
+
+也是默认从小到大排序，和set的方式几乎一样。
+
+我们下面将其改为降序排序
+
+```cpp
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+
+class MyCompare
+{
+public:
+	bool operator()(int v1, int v2) const
+	{
+		return v1 > v2;
+	}
+};
+
+
+void test01()
+{
+	map<int, int, MyCompare> m1;
+
+	m1.insert(make_pair(1, 10));
+	m1.insert(make_pair(3, 30));
+	m1.insert(make_pair(2, 20));
+	m1.insert(make_pair(5, 50));
+	m1.insert(make_pair(4, 40));
+
+	for (auto it = m1.begin(); it != m1.end(); it++)
+	{
+		cout << "key = " << it->first << " value = " << it->second << endl;
+	}
+
+
+}
+
+int main()
+{
+
+	test01();
+	return 0;
+}
+```
+
+---
+
