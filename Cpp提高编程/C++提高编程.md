@@ -3148,3 +3148,386 @@ int main()
 
 ---
 
+## 4. STL- 函数对象
+
+### 4.1 函数对象
+
+#### 4.1.1 函数对象概念
+
+**概念：**
+
+- 重载函数调用操作符的类，其对象常称为函数对象。
+- 函数对象使用重载的()时候，行为类似函数调用，也叫仿函数
+
+**本质:**
+
+- 函数对象(仿函数)是一个类，不是一个函数。
+
+####  4.1.2 函数对象的使用
+
+- 函数对象在使用时，可以像普通函数那样调用，可以有参数，可以有返回值。
+- 函数对象超出普通函数的概念，函数对象可以有自己的状态。
+- 函数对象可以作为参数传递
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+/*
+- 函数对象在使用时，可以像普通函数那样调用，可以有参数，可以有返回值。
+- 函数对象超出普通函数的概念，函数对象可以有自己的状态。
+- 函数对象可以作为参数传递
+*/
+
+//1. 函数对象在使用时，可以像普通函数那样调用，可以有参数，可以有返回值。
+class MyAdd
+{
+public:
+	int operator()(int v1, int v2)
+	{
+		return v1 + v2;
+	}
+};
+void test01()
+{
+	MyAdd myAdd;
+	cout << myAdd(1, 1) << endl;
+}
+
+
+//2. 函数对象超出普通函数的概念，函数对象可以有自己的状态
+class MyPrint
+{
+public:
+	MyPrint()
+	{
+		count = 0;
+	}
+
+	void operator()(string test)
+	{
+		cout << test << endl;
+		this->count++;
+	}
+	
+	int count;
+};
+
+void test02()
+{
+	MyPrint myPrint;
+
+	myPrint("hello N9!");
+	myPrint("hello N9!");
+	myPrint("hello N9!");
+	myPrint("hello N9!");
+	myPrint("hello N9!");
+
+	cout << "myPrint 调用次数: " << myPrint.count << endl;
+}
+
+//3. 函数对象可以作为参数传递
+void doPrint(MyPrint & mp, string test)
+{
+	mp(test);
+}
+
+void test03()
+{
+	MyPrint myPrint;
+	doPrint(myPrint, "hello DBQ");
+}
+
+int main()
+{
+	test01();
+	test02();
+	test03();
+	return 0;
+}
+```
+
+###  4.2 谓词
+
+概念:
+
+- 返回bool类型的仿函数称为谓词
+- 如果operatro()接受一个参数，那么称为一元谓词
+- 如果operator()接受两个参数，那么称为二元谓词
+
+####  4.2.1 一元谓词
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class CreateFive
+{
+public:
+	//- 返回bool类型的仿函数称为谓词
+	//-如果operatro()接受一个参数，那么称为一元谓词
+	bool operator()(int val)
+	{
+		return val > 5;
+	}
+
+};
+
+
+void test01()
+{
+	vector<int> v;
+	
+	for (int i = 0; i < 10; i++)
+		v.push_back(i);
+
+	auto it = find_if(v.begin(), v.end(), CreateFive());
+	if (it == v.end())
+	{
+		cout << "没有找到！ " << endl;
+	}
+	else
+	{
+		cout << "找到了 " << *it << endl;
+	}
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+####  4.2.2 二元谓词
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+
+//bool Compare(int v1, int v2)
+//{
+//	return v1 > v2;
+//}
+
+class ClassCompare
+{
+public:
+	bool operator()(int v1, int v2)
+	{
+		return v1 > v2;
+	}
+};
+
+void test01()
+{
+	vector<int> v;
+	v.push_back(10);
+	v.push_back(40);
+	v.push_back(50);
+	v.push_back(30);
+	v.push_back(20);
+
+	sort(v.begin(), v.end());
+
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << *it << " ";
+	cout << endl;
+
+	
+	//sort(v.begin(), v.end(), Compare);
+
+	sort(v.begin(), v.end(), ClassCompare());
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << *it << " ";
+	cout << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+### 4.3 内建函数对象
+
+#### 4.3.1 内建函数对象意义
+
+- STL提供了一些函数对象
+- 算术仿函数
+- 关系仿函数
+- 逻辑仿函数
+
+这些仿函数所产生的对象，用法和一般函数完全相同，但是使用时候，需要引入头文件`#include<functional>`
+
+#### 4.3.2 算数仿函数
+
+![image-20250728161941759](http://szn0n3z42.hb-bkt.clouddn.com/image-20250728161941759.png)
+
+
+
+```cpp
+#include <iostream>
+#include <functional>
+using namespace std;
+
+// 一元仿函数. 取反
+void test01()
+{
+	negate<int> n;
+
+	cout << n(10) << endl;
+	cout << n(-20) << endl;
+	cout << n(666) << endl;
+
+}
+
+// 二元仿函数 加法
+void test02()
+{
+	plus<int> p;
+
+	cout << p(1, 1) << endl;
+	cout << p(1, 2) << endl;
+	cout << p(1, 3) << endl;
+
+}
+
+int main()
+{
+	test01();
+	test02();
+	return 0;
+}
+```
+
+---
+
+#### 4.3.3 关系仿函数
+
+![image-20250728163300622](http://szn0n3z42.hb-bkt.clouddn.com/image-20250728163300622.png)
+
+```cpp
+#include <iostream>
+#include <functional>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+class MyCompare
+{
+public:
+	bool operator()(int v1, int v2)
+	{
+		return v1 > v2;
+	}
+};
+
+
+//大于 greater
+void test01()
+{
+	vector<int> v;
+
+	v.push_back(10);
+	v.push_back(50);
+	v.push_back(30);
+	v.push_back(40);
+	v.push_back(20);
+
+
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+
+	//相同
+	//sort(v.begin(), v.end(), MyCompare());
+	sort(v.begin(), v.end(), greater<int>());
+
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << *it << " ";
+
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+####  4.3.4 逻辑仿函数
+
+![image-20250728164401796](http://szn0n3z42.hb-bkt.clouddn.com/image-20250728164401796.png)
+
+```cpp
+#include <iostream>
+#include <functional>
+#include <vector>
+#include <algorithm>
+
+
+using namespace std;
+
+//逻辑非 logical_not
+void test01()
+{
+	vector<bool> v;
+	v.push_back(true);
+	v.push_back(false);
+	v.push_back(true);
+	v.push_back(false);
+
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;;
+
+	//利用逻辑非 将容器v搬运到v2中， 并执行取反操作
+	vector<bool> v2;
+
+	//必须提前开辟空间
+	v2.resize(v.size());
+
+	transform(v.begin(), v.end(),v2.begin(), logical_not<bool>());
+
+	for (auto it = v2.begin(); it != v2.end(); it++)
+		cout << *it << " ";
+	
+}
+
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+- 逻辑仿函数实际应用很少，了解即可.
+
+---
+
