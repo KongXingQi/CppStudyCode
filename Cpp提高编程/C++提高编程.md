@@ -701,7 +701,39 @@ int main()
 
 ## 2. STL初始
 
+STL，全称为 Standard Template Library（标准模板库），是 C++ 标准库中非常重要且强大的部分。它提供了一系列**通用的模板类和函数**，让我们能够方便、高效地处理数据结构和算法问题。
 
+STL分为六大组件:
+
+- 容器： 用来存放数据结构
+- 算法： 各种各样的算法
+- 迭代器：扮演了容器和算法的胶合剂，连接容器和算法，提供统一的访问方式。
+- 仿函数：行为类似函数，可以作为算法的某种策略
+- 适配器：修饰容器或者仿函数或迭代器接口的东西
+- 空间配置器：负责空间的配置管理
+
+### 2.1 STL的三大组件
+
+- **容器（Containers）**
+   容器是用来存储和组织数据的类模板。常见的容器有：
+  - 顺序容器：如 `vector`（动态数组）、`list`（双向链表）、`deque`（双端队列）
+  - 关联容器：如 `set`、`map`（基于红黑树的平衡树结构）
+  - 无序关联容器：如 `unordered_set`、`unordered_map`（基于哈希表）
+- **算法（Algorithms）**
+   STL提供了大量的通用算法，如排序、查找、拷贝、合并、差集等。这些算法与容器无关，只要容器支持迭代器，就能使用算法。
+- **迭代器（Iterators）**
+   迭代器是连接容器和算法的桥梁，类似于通用指针，能够访问容器中的元素。不同容器支持不同类别的迭代器（输入迭代器、输出迭代器、前向迭代器、双向迭代器、随机访问迭代器），为算法提供灵活的访问方式。
+
+### 2.2 STL的特点
+
+- **泛型编程**
+   STL基于模板实现，能够支持任意类型的数据，极大地增强了代码的复用性和灵活性。
+- **高效性**
+   STL的实现高度优化，许多算法和容器在性能上都接近手写代码。
+- **易用性和可维护性**
+   使用STL能大幅减少代码量，避免重复造轮子，提高开发效率和代码的可维护性。
+- **标准化**
+   STL是C++标准库的组成部分，跨平台、稳定，广泛被使用和支持。
 
 ## 3. STL常用的容器
 
@@ -3530,4 +3562,1267 @@ int main()
 - 逻辑仿函数实际应用很少，了解即可.
 
 ---
+
+## 5. STL  - 常用算法
+
+- 算法主要由头文件 `<algorithm><functional><numeric>` 组成
+- `<algorithm>` 是所有STL头文件中最大的一个，范围涉及到比较，交换，查找，遍历，复制，修改等等。
+- `<numeric>` 体积小，只包括几个序列上面进行简单数学运算的模板算法。
+- `<functional>` 定义了一些模板类，用以声明函数对象
+
+### 5.1 常用的遍历算法
+
+掌握常用的遍历算法
+
+- `for_each` 遍历容器
+- `transform` 搬运容器到另一个容器中
+
+#### 5.1.1 for_each
+
+- `for_each(iterator beg, iterator end, _func);`
+
+- beg开始迭代器，end结束迭代器，_func函数或者函数对象
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+
+//普通函数
+void print01(int val)
+{
+	cout << val << " ";
+}
+
+void test01()
+{
+	vector<int>  v;
+
+	for (int i = 0; i < 10; i++)
+		v.push_back(i);
+
+	for_each(v.begin(), v.end(), print01);
+	cout << endl;
+
+}
+
+// 函数对象(仿函数)
+class print02
+{
+public:
+	void operator()(int val)
+	{
+		cout << val << " ";
+	}
+};
+
+void test02()
+{
+	vector<int>  v;
+
+	for (int i = 0; i < 10; i++)
+		v.push_back(i);
+
+	for_each(v.begin(), v.end(), print02());
+	cout << endl;
+
+
+}
+
+int main()
+{
+	test01();
+
+	test01();
+	return 0;
+}
+```
+
+####  5.1.2 transform
+
+- `transform(iterator beg1, iterator end1, iterator beg2, _func);`
+- beg1 源容器开始迭代器， end1源容器结束迭代器，beg2 目标容器开始迭代器， _func 函数或者函数对象。
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+
+class TransForm
+{
+public:
+	int operator()(int val)
+	{
+		//支持操作
+		return val%2;
+	}
+	
+};
+
+class MyPrint
+{
+public:
+	void operator()(int val)
+	{
+		cout << val << " ";
+	}
+};
+
+
+void test01()
+{
+	vector<int> v1;
+	for (int i = 0; i < 10; i++)
+		v1.push_back(i);
+
+	vector<int> v2;
+	//提前开辟空间
+	v2.resize(v1.size());
+
+	transform(v1.begin(), v1.end(), v2.begin(), TransForm());
+	for_each(v2.begin(), v2.end(), MyPrint());
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+- 目标容器必须体检开辟空间，否则无法正常搬运。
+
+---
+
+###  5.2 常用的查找算法
+
+####  5.2.1 find
+
+- `find(iterator beg, iterator end, value)`
+
+按值来查找元素，找到返回指定位置迭代器，找不到返回结束迭代器位置
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+//1. 查找内置数据类型
+void test01()
+{
+	vector<int> v;
+
+	v.push_back(10);
+	v.push_back(20);
+	v.push_back(30);
+	v.push_back(40);
+	v.push_back(50);
+
+
+	auto it = find(v.begin(), v.end(), 20);
+
+	if (it == v.end())
+	{
+		cout << "没有找到。" << endl;
+	}
+	else
+	{
+		cout << "找到了!" << endl;
+	}
+
+
+}
+
+//2. 查找自定义数据类型
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+	bool operator==(const Person& p)
+	{
+		return this->m_Name == p.m_Name && this->m_Age == p.m_Age;
+	}
+	string m_Name;
+	int m_Age;
+};
+void test02()
+{
+	vector<Person> v;
+
+	Person p1("aaa", 11);
+	Person p2("bbb", 12);
+	Person p3("ccc", 13);
+	Person p4("ddd", 14);
+	Person p5("eee", 15);
+
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+	v.push_back(p5);
+
+	Person pp("ccc", 12);
+
+	auto it = find(v.begin(), v.end(), pp);
+	if (it == v.end())
+	{
+		cout << "没有找到。" << endl;
+	}
+	else
+	{
+		cout << "找到了!" << endl;
+	}
+
+}
+int main()
+{
+
+	//test01();
+	test02();
+	return 0;
+}
+```
+
+#### 5.2.2 find_if
+
+- 按照条件查找元素
+- `find_if(iterator beg, iterator end, _Pred);`
+
+按照 _Pred 的条件来找元素，找到返回迭代器。
+
+_Pred 是一个函数或者谓词(返回bool类型的仿函数)
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+
+
+
+//1. 查找内置数据类型
+// 函数方式
+//bool CreateFive(int val)
+//{
+//	return val > 5;
+//}
+
+//谓词方式
+class CreateFive
+{
+public:
+	bool operator()(int val)
+	{
+		return val > 5;
+	}
+};
+
+void test01()
+{
+	vector<int> v;
+	for (int i = 0; i < 10; i++)
+	{
+		v.push_back(i);
+	}
+
+	auto it = find_if(v.begin(), v.end(), CreateFive());
+	if (it == v.end())
+	{
+		cout << "找不到" << endl;
+	}
+	else
+	{
+		cout << "找到了大于5的数为: " << *it << endl;
+	}
+	
+}
+
+
+//2. 查找自定义数据类型
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+
+
+	string m_Name;
+	int m_Age;
+};
+
+
+class Greater20
+{
+public:
+	bool operator()(const Person& p)
+	{
+		return p.m_Age > 20;
+	}
+};
+
+void test02()
+{
+	vector<Person> v;
+	Person p1("aaa", 10);
+	Person p2("bbb", 21);
+	Person p3("ccc", 15);
+	Person p4("ddd", 40);
+
+
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+
+	auto it = find_if(v.begin(), v.end(), Greater20());
+	if (it == v.end())
+	{
+		cout << "没找到!" << endl;
+	}
+	else
+	{
+		cout << "找到了 姓名: " << it->m_Name << " 年龄: " << it->m_Age << endl;
+	}
+}
+
+int main()
+{
+	//test01();
+	test02();
+	return 0;
+}
+```
+
+#### 5.2.3 adjacent_find
+
+- 查找**相邻重复**元素
+- `adjacent_find(iterator beg, iterator end)`
+
+查找相邻重复元素，返回相邻元素的第一个位置的迭代器
+
+代码示例:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void test01()
+{
+	vector<int> v;
+	v.push_back(1);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+	v.push_back(5);
+
+	auto it = adjacent_find(v.begin(), v.end());
+	if (it == v.end())
+	{
+		cout << "没有找到! " << endl;
+	}
+	else
+	{
+		cout << "找到了他是:" << *it << endl;
+	}
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+#### 5.2.4 binary_search
+
+- 查找指定元素是否存在
+- `bool binary_search(iterator beg, iterator end, value);`
+
+查找指定的元素，查到返回true，查不到返回false。
+
+注意必须在**有序序列**中查找。
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void test01()
+{
+	vector<int> v;
+	for (int i = 0; i < 10; i++)
+		v.push_back(i);
+
+	//必须是有序的
+	//无序序列结果未知。
+	if (binary_search(v.begin(), v.end(), 8))
+	{
+		cout << "找到了 " << endl;
+	}
+	else
+	{
+		cout << "没有找到 " << endl;
+	}
+
+}
+
+int main()
+{
+
+	test01();
+	return 0;
+}
+```
+
+####  5.2.5 count
+
+- 统计元素个数
+- `count(iterator beg, iterator end, value);`
+
+统计在beg到end这个区间内出现的次数。
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+
+//1. 统计内置数据类型
+void test01()
+{
+	vector<int> v;
+	v.push_back(1);
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(2);
+	v.push_back(2);
+	v.push_back(3);
+
+	int ret = count(v.begin(), v.end(), 2);
+
+	cout << ret << endl;
+
+}
+
+//2. 统计自定义数据类型
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->n_Name = name;
+		this->m_Age = age;
+	}
+
+	bool operator==(const Person& p)
+	{
+		return this->m_Age == p.m_Age;
+	}
+
+	string n_Name;
+	int m_Age;
+};
+void test02()
+{
+	vector<Person> v;
+
+	Person p1("xl", 21);
+	Person p2("N9", 21);
+	Person p3("DBQ", 21);
+	Person p4("Ayom", 25);
+
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+
+	Person p5("577", 21);
+	int ret = count(v.begin(), v.end(), p5);
+
+	cout << "和" << p5.n_Name << "同岁的有: " << ret << " 个" << endl;
+
+}
+
+
+int main()
+{
+	//test01();
+	test02();
+	return 0;
+}
+```
+
+#### 5.2.6 count_if
+
+- 按条件统计元素个数
+- `count_if(iterator beg, iterator end, _Pred);`
+
+从beg到end这个区间里面按照谓词_Pred里面的条件统计元素的个数。
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+//1. 内置数据类型
+class Greater2
+{
+public:
+	bool operator()(int v)
+	{
+		return v > 2;
+	}
+
+};
+
+void test01()
+{
+	vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+
+	int ret = count_if(v.begin(), v.end(), Greater2());
+	cout << ret << endl;
+}
+
+//2. 自定义数据类型
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+
+	string m_Name;
+	int m_Age;
+};
+class Greater18
+{
+public:
+	bool operator()(const Person& p)
+	{
+		return p.m_Age > 18;
+	}
+};
+
+void test02()
+{
+	vector<Person> v;
+	Person p1("aaa", 13);
+	Person p2("bbb", 18);
+	Person p3("ccc", 22);
+	Person p4("ddd", 25);
+	Person p5("ddd", 31);
+	Person p6("ddd", 100);
+
+
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+	v.push_back(p5);
+	v.push_back(p6);
+
+
+	int ret = count_if(v.begin(), v.end(), Greater18());
+	cout << ret << endl;
+}
+
+int main()
+{
+	//test01();
+	test02();
+	return 0;
+}
+```
+
+---
+
+### 5.3 常用的排序算法
+
+#### 5.3.1 sort
+
+- 给容器排序
+
+- `sort(iterator beg, iterator end, _Pred);`
+
+将区间beg到end排序，默认从小到大，_Pred谓词可以改变排序顺序。
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+
+using namespace std;
+
+void Myprint(int val)
+{
+	cout << val << " ";
+}
+
+void test01()
+{
+	vector<int> v;
+	v.push_back(2);
+	v.push_back(5);
+	v.push_back(1);
+	v.push_back(3);
+	v.push_back(4);
+
+	sort(v.begin(), v.end());
+	for_each(v.begin(), v.end(), Myprint);
+	cout << endl;
+	//降序
+	sort(v.begin(), v.end(), greater<int>());
+	for_each(v.begin(), v.end(), Myprint);
+
+}
+
+
+int main()
+{
+	test01();
+	return 0; 
+}
+```
+
+#### 5.3.2 random_shuffle
+
+- 洗牌 指定范围内的元素随机调整次序
+- `random_shuffle(iterator beg, iterator end);`
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <ctime>
+
+using namespace std;
+
+void test01()
+{
+	srand((unsigned)time(NULL));
+	vector<int> v;
+	for (int i = 0; i < 10; i++)
+		v.push_back(i);
+
+	random_shuffle(v.begin(), v.end());
+
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << *it << " ";
+	cout << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+用的时候记得加随机数种子
+
+#### 5.3.3 merge
+
+- 将两个容器合并，并存储到另一个容器中
+- `merge(iterator beg1, end1, beg2, end2, dest);`
+
+将**两个有序**的容器合并到dest目标容器。
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void test01()
+{
+	vector<int> v1;
+	vector<int> v2;
+	//有序序列
+	for (int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+		v2.push_back(i+1);
+	}
+
+	//必须有足够的空间
+	vector<int> v3;
+	v3.resize(v1.size() + v2.size());
+
+	merge(v1.begin(), v1.end(), v2.begin(), v2.end(), v3.begin());
+
+	for (auto it = v3.begin(); it != v3.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+#### 5.3.4 reverse
+
+- 将容器内元素进行反转
+- `reverse(iterator beg, iterator end);`
+
+反转beg到end区间内元素。
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void test01()
+{
+	vector<int> v1;
+	for (int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+	}
+
+	reverse(v1.begin(), v1.end());
+
+	for (auto it = v1.begin(); it != v1.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+### 5.4 常用的拷贝和替换算法
+
+#### 5.4.1 copy
+
+- 拷贝函数
+- `copy(iterator beg, iterator end, iterator dest);`
+
+将beg到end区间的元素全部拷贝到dest目标容器中，dest是目标起始迭代器。
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void test01()
+{
+	vector<int> v1;
+	for (int i = 0; i < 10; i++)
+		v1.push_back(i);
+
+	vector<int> v2;
+	v2.resize(v1.size());
+	copy(v1.begin(), v1.end(), v2.begin());
+
+	for (auto it = v2.begin(); it != v2.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+#### 5.4.2 replace
+
+- 将容器内指定范围的旧元素修改为新元素。
+- `replace(iterator beg, iterator end, oldvalue, newvalue);`
+
+将区间beg到end中的oldvalue改为newvalue
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void test01()
+{
+	vector<int> v1;
+	v1.push_back(1);
+	v1.push_back(2);
+	v1.push_back(1);
+	v1.push_back(2);
+	v1.push_back(1);
+
+	//将1 改为 10
+	//
+	replace(v1.begin(), v1.end(), 1, 10);
+
+	for (auto it = v1.begin(); it != v1.end(); it++)
+		cout << *it << " ";
+
+	cout << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+#### 5.4.3 replace_if
+
+- 将区间内满足条件的元素，替换成指定元素。
+- `replace_if(iterator beg, iterator end, _Pred, newvalue);`
+
+将去区间内，满足_Pred条件的全部替换为newvalue.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+using namespace std;
+
+
+class Greater2
+{
+public:
+	bool operator()(int val)
+	{
+		return val > 2;
+	}
+
+};
+
+//1. 内置数据类型
+void test01()
+{
+	vector<int> v1;
+	v1.push_back(1);
+	v1.push_back(2);
+	v1.push_back(3);
+	v1.push_back(4);
+	v1.push_back(5);
+	for (auto it = v1.begin(); it != v1.end(); it++)
+		cout << *it << " ";
+	cout << endl;
+
+	replace_if(v1.begin(), v1.end(), Greater2(), 2);
+
+	for (auto it = v1.begin(); it != v1.end(); it++)
+		cout << *it << " ";
+	cout << endl;
+}
+
+//2. 自定义数据类型
+class Person
+{
+public:
+	Person(string name, int age)
+	{
+		this->m_Name = name;
+		this->m_Age = age;
+	}
+
+	string m_Name;
+	int m_Age;
+};
+class Greater18
+{
+public:
+	bool operator()(const Person& p)
+	{
+		return p.m_Age > 18;
+	}
+};
+
+
+void test02()
+{
+	vector<Person> v;
+	Person p1("aaa", 18);
+	Person p2("aaa", 21);
+	Person p3("aaa", 30);
+	Person p4("aaa", 12);
+	Person p5("aaa", 13);
+
+	v.push_back(p1);
+	v.push_back(p2);
+	v.push_back(p3);
+	v.push_back(p4);
+	v.push_back(p5);
+
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << "姓名:" << it->m_Name << " 年龄: " << it->m_Age;
+	cout << endl;
+
+
+
+	Person pp("ccc", 18);
+	replace_if(v.begin(), v.end(), Greater18(), pp);
+
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << "姓名:" << it->m_Name << " 年龄: " << it->m_Age;
+	cout << endl;
+
+
+}
+
+int main()
+{
+	//test01();
+	test02();
+	return 0;
+}
+```
+
+#### 5.4.4 swap
+
+- 互换两个**相同**容器的元素
+- `swap(container c1, container c2)`
+
+不仅可以互换容器，还可以互换以下。
+
+| 类型                                   | 能否使用 swap         | 备注                               |
+| -------------------------------------- | --------------------- | ---------------------------------- |
+| 基本类型（int, double 等）             | ✅                     | 最基本用法                         |
+| STL容器                                | ✅                     | 如 vector、map、set 等             |
+| 原始指针                               | ✅                     | `int* p1, *p2; std::swap(p1, p2);` |
+| 自定义类型                             | ✅                     | 成员可交换，或你自定义了 swap      |
+| 智能指针（`shared_ptr`, `unique_ptr`） | ✅                     | 内部实现了 swap                    |
+| 数组（如 `int a[10]`, `int b[10]`）    | ❌（需要手动交换元素） | 原生数组不支持整体 swap            |
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void myPrint(int val)
+{
+	cout << val << " ";
+}
+
+void test01()
+{
+	vector<int> v1, v2;
+	for (int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+		v2.push_back(i + 10);
+	}
+
+	cout << "交换前: " << endl;
+	for_each(v1.begin(), v1.end(), myPrint);
+	cout << endl;
+	for_each(v2.begin(), v2.end(), myPrint);
+	cout << endl;
+
+
+	cout << "--------------------------------------" << endl;
+	cout << "交换后: " << endl;
+	swap(v1, v2);
+
+	for_each(v1.begin(), v1.end(), myPrint);
+	cout << endl;
+	for_each(v2.begin(), v2.end(), myPrint);
+	cout << endl;
+
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+### 5.5 常用的算术生成算法
+
+头文件`<numeric>`
+
+#### 5.5.1 accumulate
+
+- 计算区间内容器元素积累总和
+- `accumlate(iterator beg, iterator end, value);`
+
+将区间内的元素和加起来，value是起始累加值
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <numeric>
+
+using namespace std;
+
+
+void test01()
+{
+	vector<int> v;
+	for (int i = 0; i <= 100; i++)
+		v.push_back(i);
+
+	int total = accumulate(v.begin(), v.end(), 1000); // + 1000
+
+	cout << total << endl;
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+#### 5.5.2 fill 
+
+- 向函数中填充指定的元素
+- `fill(iterator beg, iterator end, value);`
+
+将区间内的元素填充成value
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <numeric>
+
+using namespace std;
+
+
+void test01()
+{
+	vector<int> v;
+	v.resize(10);
+
+	//后期填充
+	fill(v.begin(), v.end(), 10);
+	for (auto it = v.begin(); it != v.end(); it++)
+		cout << *it << " ";
+	cout << endl;
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+---
+
+### 5.6 常用的集合算法
+
+掌握交集，并集，差集。
+
+#### 5.6.1 set_intersection
+
+- 交集，两个容器共同出现的元素。
+
+- `set_intersection(beg1,end1,beg2,end2,dest)`
+
+将两个容器的交集置于目标容器中去，dest为目标容器的起始迭代器, 返回交集最后一个迭代器。
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+
+using namespace std;
+
+
+void test01()
+{
+	vector<int> v1, v2;
+	for (int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+		v2.push_back(i + 5); // 5~14
+	}
+
+	vector<int> v3;
+	//最特殊的情况就是一个容器包含另一个容器
+	v3.resize(min(v1.size(), v2.size()));
+	auto itEnd = set_intersection(v1.begin(), v1.end(), v2.begin(), v2.end(), v3.begin());
+
+	for (auto it = v3.begin(); it != itEnd; it++)
+		cout << *it << " ";
+	cout << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+```
+
+#### 5.6.2 set_union
+
+- 并集，两个**有序**容器合并。
+- `set_union(beg1,end1,beg2,end2,dest)`
+
+将两个容器取并集，必须是有序容器，然后返回并集后的最后一个迭代器。
+
+ ```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+
+using namespace std;
+
+
+void test01()
+{
+	vector<int> v1, v2;
+	for (int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+		v2.push_back(i + 5); // 5~14
+	}
+
+	vector<int> v3;
+	//最特殊的情况就是两个容器元素全部不一样，需要全部合并。
+	v3.resize(v1.size() + v2.size());
+	auto itEnd = set_union(v1.begin(), v1.end(), v2.begin(), v2.end(), v3.begin());
+
+	for (auto it = v3.begin(); it != itEnd; it++)
+		cout << *it << " ";
+	cout << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+ ```
+
+#### 5.6.3 set_difference
+
+- 差集：属于集合 A 但不属于集合 B 的元素
+- `set_union(beg1,end1,beg2,end2,dest)`
+
+将两个容器的差集，放入目标容器中去，但要注意谁与谁的差集。
+
+![image-20250731200746503](http://szn0n3z42.hb-bkt.clouddn.com/image-20250731200746503.png)
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+
+using namespace std;
+
+
+void test01()
+{
+	vector<int> v1, v2;
+	for (int i = 0; i < 10; i++)
+	{
+		v1.push_back(i);
+		v2.push_back(i + 5); // 5~14
+	}
+
+	vector<int> v3;
+	//最特殊的情况就是两个容器没有交集，取最大的容器即可
+	v3.resize(max(v1.size(), v2.size()));
+	
+
+	cout << "v1 和 v2 容器的差集: " << endl;
+	auto itEnd = set_difference(v1.begin(), v1.end(), v2.begin(), v2.end(), v3.begin());
+	for (auto it = v3.begin(); it != itEnd; it++)
+		cout << *it << " ";
+	cout << endl;
+
+
+
+	cout << "v2 和 v1 容器的差集: " << endl;
+	itEnd = set_difference(v2.begin(), v2.end(), v1.begin(), v1.end(), v3.begin());
+	for (auto it = v3.begin(); it != itEnd; it++)
+		cout << *it << " ";
+	cout << endl;
+
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+
+```
+
+----
+
+课程结束🎉🌸，完美收官！👏🌟
+
+---
+
+
 
