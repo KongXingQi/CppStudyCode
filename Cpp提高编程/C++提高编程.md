@@ -41,7 +41,7 @@ template<typename T>
 
 `T` 通用的数据类型，名称可换，一般大写。 
 
-![image-20250720095105664](http://szn0n3z42.hb-bkt.clouddn.com/image-20250720095105664.png)
+![image-20250720095105664](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250720095105664.png)
 
 上图所示：我们如果交换的数据类型不止是一个，那按照以前的做法，就得实现两个函数来交换，但是这种模板的思想，我们只需要写一个就好了，而在调用的时候，有两种方式：
 
@@ -53,7 +53,7 @@ template<typename T>
 - 自动类型推导，必须推导出<mark>一致</mark>的数据类型T,才可以使用
 - 模板必须要确定出T的数据类型，才可以使用
 
-![image-20250720101839752](http://szn0n3z42.hb-bkt.clouddn.com/image-20250720101839752.png)
+![image-20250720101839752](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250720101839752.png)
 
 #### 1.2.3 函数模板案例
 
@@ -117,7 +117,7 @@ int main()
 - 函数模板用自动类型推导，不可以发生隐士类型转化。
 - 函数模板用显示指定类型，可以发生隐式类型转化。
 
-![image-20250720112529193](http://szn0n3z42.hb-bkt.clouddn.com/image-20250720112529193.png)
+![image-20250720112529193](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250720112529193.png)
 
 上图中当普通函数调用的时候，会自动将`char`类型转化成`int`类型，`10 + 97 = 107`,而模板函数中的自动类型推导则不会自动转化。
 
@@ -368,7 +368,7 @@ int main()
 
 - 类模板在模板参数列表中可以有默认参数
 
-![image-20250720155940811](http://szn0n3z42.hb-bkt.clouddn.com/image-20250720155940811.png)
+![image-20250720155940811](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250720155940811.png)
 
 就是说我要是在模板参数列表中有了默认参数，在下面使用时候只需要写出另一个即可。
 
@@ -455,7 +455,7 @@ int main()
 - 参数模板化 --- 将对象中的参数变为模板进行传递
 - 整个类模板化 --- 将这个对象类型 模板化进行传递
 
-![image-20250720170349751](http://szn0n3z42.hb-bkt.clouddn.com/image-20250720170349751.png)
+![image-20250720170349751](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250720170349751.png)
 
 代码示例:
 
@@ -542,7 +542,7 @@ int main()
 
 下图 当我们的父类是一个类模板的时候，正常的方式肯定是不可以的，需要在Base后面写出参数列表。
 
-![image-20250721084944821](http://szn0n3z42.hb-bkt.clouddn.com/image-20250721084944821.png)
+![image-20250721084944821](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250721084944821.png)
 
 ```cpp
 template<class T>
@@ -575,7 +575,7 @@ public:
 
 - 类模板中成员函数类外实现时，需要加上模板参数列表
 
-![image-20250721092932881](http://szn0n3z42.hb-bkt.clouddn.com/image-20250721092932881.png)
+![image-20250721092932881](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250721092932881.png)
 
 代码示例:
 
@@ -633,7 +633,7 @@ void test01()
 
 左脚踩右脚这一块./
 
-![image-20250721110951300](http://szn0n3z42.hb-bkt.clouddn.com/image-20250721110951300.png)
+![image-20250721110951300](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250721110951300.png)
 
 ```cpp
 #include <iostream>
@@ -801,7 +801,7 @@ int main()
 
 ##### 3.1.2 string赋值操作
 
-![image-20250723094624225](http://szn0n3z42.hb-bkt.clouddn.com/image-20250723094624225.png)
+![image-20250723094624225](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250723094624225.png)
 
 代码示例:
 
@@ -865,7 +865,7 @@ int main()
 
 - 实现字符串末尾拼接字符串
 
-![image-20250723100125762](http://szn0n3z42.hb-bkt.clouddn.com/image-20250723100125762.png)
+![image-20250723100125762](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250723100125762.png)
 
 代码示例：
 
@@ -922,7 +922,7 @@ int main()
 - 替换: 查找指定字符串是否存在
 - 替换: 在指定的位置替换字符串
 
-![image-20250723102023803](http://szn0n3z42.hb-bkt.clouddn.com/image-20250723102023803.png)
+![image-20250723102023803](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250723102023803.png)
 
 代码示例:
 
@@ -1069,7 +1069,7 @@ int main()
 
 ##### 3.1.7 string插入和删除
 
-![image-20250723143101859](http://szn0n3z42.hb-bkt.clouddn.com/image-20250723143101859.png)
+![image-20250723143101859](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250723143101859.png)
 
  
 
@@ -1162,7 +1162,7 @@ int main()
 
 ##### 3.3.1 vector 构造函数
 
-![image-20250724152151512](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724152151512.png)
+![image-20250724152151512](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250724152151512.png)
 
 代码示例:
 
@@ -1219,7 +1219,7 @@ int main()
 
 ##### 3.3.2 vector 赋值操作
 
-![image-20250724153735072](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724153735072.png)
+![image-20250724153735072](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250724153735072.png)
 
 代码示例:
 
@@ -1278,7 +1278,7 @@ int main()
 
 ##### 3.3.3 vector容量和大小
 
-![image-20250724155017378](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724155017378.png)
+![image-20250724155017378](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250724155017378.png)
 
 代码示例:
 
@@ -1339,7 +1339,7 @@ int main()
 
 ##### 3.3.4 vector插入和删除
 
-![image-20250724160733658](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724160733658.png)
+![image-20250724160733658](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250724160733658.png)
 
 代码示例:
 
@@ -1404,7 +1404,7 @@ int main()
 
 ##### 3.3.5 vector数据存取
 
-![image-20250724164516903](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724164516903.png)
+![image-20250724164516903](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250724164516903.png)
 
 ```cpp
 #include <iostream>
@@ -1535,7 +1535,7 @@ int main()
 
 提前开辟可以减少中途新开辟空间，并迁移数据的麻烦。
 
-![image-20250724174720070](http://szn0n3z42.hb-bkt.clouddn.com/image-20250724174720070.png)
+![image-20250724174720070](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250724174720070.png)
 
 ```cpp
 #include <iostream>
@@ -1584,11 +1584,11 @@ int main()
 - deque相对而言，对头部的插入和删除速度比vector快
 - vector访问元素时速度比deque快，这和两者内部实现有关。
 
-![image-20250725083901808](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725083901808.png)
+![image-20250725083901808](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250725083901808.png)
 
 ##### 3.3.1 deque构造函数
 
-![image-20250725084635824](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725084635824.png)
+![image-20250725084635824](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250725084635824.png)
 
 代码示例:
 
@@ -1645,7 +1645,7 @@ int main()
 
 - deque的赋值操作和vector的赋值操作几乎一致。
 
-![image-20250725085952821](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725085952821.png)
+![image-20250725085952821](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250725085952821.png)
 
 代码示例:
 
@@ -1699,13 +1699,13 @@ int main()
 
 - 和vector的操作函数区别就少了一个容量，因为deque不需要判断容量，它本身就没有容量限制，可以无限的往后或者往前开辟空间。
 
-![image-20250725091442124](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725091442124.png)
+![image-20250725091442124](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250725091442124.png)
 
 ----
 
 #####  3.3.4deque插入和删除
 
-![image-20250725093738101](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725093738101.png)
+![image-20250725093738101](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250725093738101.png)
 
 代码示例:
 
@@ -1817,7 +1817,7 @@ int main()
 
 ##### 3.3.5 deque数据存取
 
-![image-20250725102917791](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725102917791.png)
+![image-20250725102917791](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250725102917791.png)
 
 代码示例:
 
@@ -1922,7 +1922,7 @@ int main()
 - stack -- 栈是一种给**先进后出**的一种数据结构，它是由一个出口。
 - 栈只有栈顶可以由外界访问，因此不支持遍历行为。
 
-![image-20250725155327387](http://szn0n3z42.hb-bkt.clouddn.com/image-20250725155327387.png)
+![image-20250725155327387](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250725155327387.png)
 
 代码示例:
 
@@ -2037,7 +2037,7 @@ int main()
 
 ##### 3.6.1 list 构造函数
 
-![image-20250726091616627](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726091616627.png)
+![image-20250726091616627](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250726091616627.png)
 
 代码示例:
 
@@ -2090,7 +2090,7 @@ int main()
 
 #####  3.6.2 list 赋值和交换
 
-![image-20250726093120738](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726093120738.png)
+![image-20250726093120738](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250726093120738.png)
 
 代码示例：
 
@@ -2165,7 +2165,7 @@ int main()
 
 ##### 3.6.3 list 大小操作
 
- ![image-20250726094647479](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726094647479.png)
+ ![image-20250726094647479](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250726094647479.png)
 
 代码示例:
 
@@ -2225,7 +2225,7 @@ int main()
 
 ##### 3.6.4 list 插入和删除
 
-![image-20250726095820737](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726095820737.png)
+![image-20250726095820737](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250726095820737.png)
 
 代码示例：
 
@@ -2427,7 +2427,7 @@ int main()
 
 ##### 3.7.1 set 构造和赋值
 
-![image-20250726154044831](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726154044831.png)
+![image-20250726154044831](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250726154044831.png)
 
 代码示例:
 
@@ -2586,7 +2586,7 @@ int main()
 
 ##### 3.7.3 set 插入和删除
 
-![image-20250726161347926](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726161347926.png)
+![image-20250726161347926](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250726161347926.png)
 
 ```cpp
 #include <iostream>
@@ -2720,7 +2720,7 @@ int main()
 
 如下图转到定义会发现： insert的返回值， set比multiset多一个bool型，这个bool就是看是否插入成功的。若书不存在则插入成功，返回true，若数据存在，则插入失败，返回false。
 
-![image-20250726171308638](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726171308638.png)
+![image-20250726171308638](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250726171308638.png)
 
 ----
 
@@ -2728,7 +2728,7 @@ int main()
 
 - 成对出现的数据，利用对组可以返回两个数据。
 
-![image-20250726172016695](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726172016695.png)
+![image-20250726172016695](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250726172016695.png)
 
 代码示例:
 
@@ -2872,7 +2872,7 @@ int main()
 }
 ```
 
-![image-20250726182136998](http://szn0n3z42.hb-bkt.clouddn.com/image-20250726182136998.png)
+![image-20250726182136998](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250726182136998.png)
 
 上面这张图片是在重载()时候的注意事项。
 
@@ -2899,7 +2899,7 @@ int main()
 
 - map容器中插入是以pair形式插入的。
 
-![image-20250727150303741](http://szn0n3z42.hb-bkt.clouddn.com/image-20250727150303741.png)
+![image-20250727150303741](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250727150303741.png)
 
 代码示例:
 
@@ -3017,7 +3017,7 @@ int main()
 
 ##### 3.8.3 map 插入和删除
 
-![image-20250727153758875](http://szn0n3z42.hb-bkt.clouddn.com/image-20250727153758875.png)
+![image-20250727153758875](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250727153758875.png)
 
 代码示例:
 
@@ -3414,7 +3414,7 @@ int main()
 
 #### 4.3.2 算数仿函数
 
-![image-20250728161941759](http://szn0n3z42.hb-bkt.clouddn.com/image-20250728161941759.png)
+![image-20250728161941759](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250728161941759.png)
 
 
 
@@ -3457,7 +3457,7 @@ int main()
 
 #### 4.3.3 关系仿函数
 
-![image-20250728163300622](http://szn0n3z42.hb-bkt.clouddn.com/image-20250728163300622.png)
+![image-20250728163300622](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250728163300622.png)
 
 ```cpp
 #include <iostream>
@@ -3513,7 +3513,7 @@ int main()
 
 ####  4.3.4 逻辑仿函数
 
-![image-20250728164401796](http://szn0n3z42.hb-bkt.clouddn.com/image-20250728164401796.png)
+![image-20250728164401796](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250728164401796.png)
 
 ```cpp
 #include <iostream>
@@ -4769,7 +4769,7 @@ int main()
 
 将两个容器的差集，放入目标容器中去，但要注意谁与谁的差集。
 
-![image-20250731200746503](http://szn0n3z42.hb-bkt.clouddn.com/image-20250731200746503.png)
+![image-20250731200746503](https://cdn.jsdelivr.net/gh/Kxq-xl/pic-bed/img/image-20250731200746503.png)
 
 ```cpp
 #include <iostream>
